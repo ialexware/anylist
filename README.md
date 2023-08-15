@@ -5,23 +5,33 @@
 # Development enviroment
 
 1. Clone the project
-2. copy the ```.env.template``` an rename to ```.env```
+2. copy the `.env.template` an rename to `.env`
 3. Execute
+
 ```
 yarn install
 ```
+
+Windows users
+
+```
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
 4. Execute the image (Docker desktop)
+
 ```
 docker-compose up -d
 ```
 
 5 Execute the nest server
+
 ```
 yarn start:dev
 ```
 
 6 Open the site
+
 ```
 localhost:3000/graphql
 ```
-
