@@ -11,7 +11,6 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 import { SignUpInput } from 'src/auth/dto/inputs/signup.input';
 import { Repository } from 'typeorm';
-import { ValidRolesArgs } from 'src/items/dto/args/roles.arg';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
 
 @Injectable()

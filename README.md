@@ -24,14 +24,16 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 docker-compose up -d
 ```
 
-5 Execute the nest server
+5. Execute the nest server
 
 ```
 yarn start:dev
 ```
 
-6 Open the site
+6. Open the site
 
 ```
 localhost:3000/graphql
 ```
+
+7. Execute the Mutation `executeSeed` to pupulate the DataBase in dev enviroment
