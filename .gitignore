@@ -1,6 +1,9 @@
 
 /postgres-data
+/postgres
 .env
+.env.prod
+
 
 # compiled output
 /dist
