@@ -1,5 +1,3 @@
-import { ItemsService } from './../items/items.service';
-import { UpdateUserInput } from './dto/update-user.input';
 import { ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import {
   Resolver,
@@ -11,18 +9,27 @@ import {
   Int,
   Parent,
 } from '@nestjs/graphql';
-import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { ValidRolesArgs } from 'src/items/dto/args/roles.arg';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
+import { Item } from 'src/items/entities/item.entity';
+import { PaginationArgs, SearchArgs } from 'src/common/dto/args';
+import { List } from 'src/lists/entities/list.entity';
+
+import { ValidRolesArgs } from 'src/items/dto/args/roles.arg';
+import { UpdateUserInput } from './dto/update-user.input';
+
+import { ItemsService } from './../items/items.service';
+import { UsersService } from './users.service';
+import { ListsService } from 'src/lists/lists.service';
 
 @Resolver(() => User)
 export class UsersResolver {
   constructor(
     private readonly usersService: UsersService,
     private readonly itemsService: ItemsService,
+    private readonly listsService: ListsService,
   ) {}
 
   @Query(() => [User], { name: 'users' })
@@ -31,8 +38,6 @@ export class UsersResolver {
     @Args() validRoles: ValidRolesArgs,
     @CurrentUser([ValidRoles.ADMIN, ValidRoles.SUPER_USER]) user: User,
   ): Promise<User[]> {
-    console.log(validRoles);
-
     return this.usersService.findAll(validRoles.roles);
   }
 
@@ -69,5 +74,25 @@ export class UsersResolver {
     @CurrentUser([ValidRoles.ADMIN, ValidRoles.SUPER_USER]) userValid: User,
   ): Promise<number> {
     return this.itemsService.itemCount(user);
+  }
+
+  @ResolveField('items', () => [Item], { name: 'items' })
+  async getItemsByUser(
+    @Parent() user: User,
+    @CurrentUser([ValidRoles.ADMIN, ValidRoles.SUPER_USER]) userValid: User,
+    @Args() paginationArgs: PaginationArgs,
+    @Args() searchArgs: SearchArgs,
+  ): Promise<Item[]> {
+    return this.itemsService.findAll(user, paginationArgs, searchArgs);
+  }
+
+  @ResolveField(() => [List], { name: 'lists' })
+  async getListsByUser(
+    @CurrentUser([ValidRoles.ADMIN, ValidRoles.SUPER_USER]) adminUser: User,
+    @Parent() user: User,
+    @Args() paginationArgs: PaginationArgs,
+    @Args() searchArgs: SearchArgs,
+  ): Promise<List[]> {
+    return this.listsService.findAll(user, paginationArgs, searchArgs);
   }
 }
