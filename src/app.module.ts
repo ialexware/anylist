@@ -69,7 +69,7 @@ import { ListItemModule } from './list-item/list-item.module';
 })
 export class AppModule {
   constructor() {
-    console.log('type:', 'postgres');
+    console.log('variables de entorno:');
     console.log('state:', process.env.STATE);
     console.log('host:', process.env.DB_HOST);
     console.log('port:', +process.env.DB_PORT);
